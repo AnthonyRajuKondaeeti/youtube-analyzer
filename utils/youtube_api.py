@@ -26,8 +26,6 @@ Dependencies:
 - logging: Debugging and monitoring
 - time: Retry delay management
 
-Author: Anonymous
-Version: 1.0
 """
 
 from googleapiclient.discovery import build
