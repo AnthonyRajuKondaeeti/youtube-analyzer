@@ -23,8 +23,6 @@ Dependencies:
 - torch: PyTorch for model inference
 - tqdm: Progress bar for processing feedback
 
-Author: Anonymous
-Version: 1.0
 """
 
 import pandas as pd
