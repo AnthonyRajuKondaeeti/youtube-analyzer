@@ -25,8 +25,6 @@ Dependencies:
 - logging: System logging for debugging
 - os: File system operations
 
-Author: Anonymous
-Version: 1.0
 """
 
 import os
