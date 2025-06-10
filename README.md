@@ -131,6 +131,7 @@ youtube-video-analyzer/
 │   ├── keyword_transcript.py # Keyword extraction
 │   ├── emotion_analysis.py   # Transcript emotion analysis
 ├── yt-extension/              # Chrome extension
+│   ├── background.js          
 │   ├── manifest.json         # Extension config
 │   ├── popup.html            # Popup UI
 │   ├── popup.js              # Popup logic
