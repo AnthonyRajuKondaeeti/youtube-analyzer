@@ -20,8 +20,6 @@ Dependencies:
 - emoji: Converts emojis to text representations
 - re: Regular expression operations for text cleaning
 
-Author: Anonymous
-Version: 1.0
 """
 
 import emoji
