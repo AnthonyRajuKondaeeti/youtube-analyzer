@@ -25,8 +25,6 @@ Dependencies:
 - math: Mathematical constants for potential radar chart calculations
 - bar_chart_race: Optional dependency for animated bar chart races
 
-Author: Anonymous
-Version: 1.0
 """
 
 import matplotlib
