@@ -16,8 +16,6 @@ Dependencies:
 - Fetch API: For server communication
 - popup.html: For DOM elements (button, select, status, loading)
 
-Author: Anonymous
-Version: 1.0
 */
 
 // Add click event listener to the "Start Analysis" button
