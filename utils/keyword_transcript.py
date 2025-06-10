@@ -24,8 +24,6 @@ Dependencies:
 - seaborn: Optional visualization styling (for commented-out visualization)
 - os: File system operations for saving outputs
 
-Author: Anonymous
-Version: 1.0
 """
 
 import yake
