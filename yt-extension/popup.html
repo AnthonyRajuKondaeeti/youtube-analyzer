@@ -1,0 +1,132 @@
+<!--
+YouTube Video Analyzer Chrome Extension Popup
+
+This HTML template defines the popup interface for a Chrome extension that integrates with a YouTube Video Analyzer web application. The popup allows users to select a transcript language (English, Hindi, or Telugu) and initiate video analysis by clicking a button. It includes a status message area and a loading spinner to indicate processing. The design is compact, styled with custom CSS for a clean and modern look, optimized for a 280px-wide popup window. JavaScript (loaded from popup.js) handles the interaction with the server and updates the UI dynamically.
+
+Features:
+- Dropdown to select transcript language (English, Hindi, Telugu)
+- Button to start video analysis
+- Status message display for feedback
+- Loading spinner animation during processing
+- Responsive, compact design for Chrome extension popup
+- Custom CSS with hover effects and spinner animation
+
+Dependencies:
+- popup.js: JavaScript file for handling button clicks and server communication
+- Chrome browser: For rendering the extension popup
+
+Author: Anonymous
+Version: 1.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Analyzer</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            width: 280px;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        button {
+            margin-top: 15px;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #status {
+            margin-top: 10px;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+
+        #loading {
+            text-align: center;
+            display: none;
+            margin-top: 10px;
+        }
+
+        .spinner {
+            margin: 10px auto;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h4>🎬 Analyze YouTube Video</h4>
+
+    <label for="language">Select Language:</label>
+    <select id="language">
+        <option value="en">English</option>
+        <option value="hi">Hindi</option>
+        <option value="te">Telugu</option>
+    </select>
+
+    <button id="analyzeBtn">Start Analysis</button>
+    <p id="status"></p>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <p style="margin: 0; color: #666;">Processing...</p>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
