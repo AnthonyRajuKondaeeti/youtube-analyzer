@@ -10,21 +10,28 @@ dist/
 
 # Environment variables
 .env
+*.env
 
 # Virtual environments
 venv/
 env/
-*.venv/
+.venv/
 
 # Generated output files
 static/data/*
 !static/data/.gitkeep  # Optional: Preserve empty directory structure
+
+# Chrome extension generated files
+yt-extension/*.log 
+yt-extension/*.bak
 
 # IDE and editor files
 .vscode/
 .idea/
 *.sublime-project
 *.sublime-workspace
+*.swp
+*~
 
 # System-specific files
 .DS_Store
@@ -35,5 +42,4 @@ Thumbs.db
 
 # Miscellaneous
 *.bak
-*.swp
-*~
+*.tmp
