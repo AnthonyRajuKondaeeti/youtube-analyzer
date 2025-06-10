@@ -21,8 +21,6 @@ Dependencies:
 - pandas: DataFrame handling and manipulation
 - tqdm: Progress bar for processing feedback
 
-Author: Anonymous
-Version: 1.0
 """
 
 from transformers import pipeline
