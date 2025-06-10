@@ -1,0 +1,401 @@
+<!--
+YouTube Video Analysis Results Page
+
+This HTML template creates a results page for a YouTube Video Analyzer web application. It displays the analysis output, including the video title, channel name, full transcript, CSV data tables with pagination and search functionality, and generated visualization images. The page uses custom CSS for a modern, responsive design with a gradient background, card-based layout, and hover effects. JavaScript handles dynamic table rendering, pagination, and global search across CSV tables. Users can download the transcript as a text file. The page integrates with Flask for dynamic data rendering and file serving.
+
+Features:
+- Displays video metadata (title and channel name)
+- Shows full transcript in a scrollable box with download option
+- Renders CSV data in paginated, searchable tables
+- Displays visualization images with hover zoom effect
+- Global search across all CSV tables
+- Responsive design with media queries for mobile devices
+- Custom styling with CSS variables, gradients, and shadows
+
+Dependencies:
+- Flask: For rendering dynamic content and serving static files
+- JavaScript: For table rendering, pagination, and search functionality
+- CSS: Custom styles with no external frameworks
+
+Author: Anonymous
+Version: 1.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analysis Results</title>
+
+    <style>
+      /* Define CSS variables for consistent theming */
+      :root {
+        --primary-color: #667eea;
+        --secondary-color: #764ba2;
+        --accent-color: #4ecdc4;
+        --danger-color: #ff6b6b;
+        --text-dark: #2d2d2d;
+        --text-light: #f8f9fa;
+        --bg-light: #ffffff;
+        --card-bg: #f9f9fb;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        --radius: 12px;
+      }
+
+      /* Style the body with a gradient background and font settings */
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        min-height: 100vh;
+        color: var(--text-dark);
+      }
+
+      /* Style the main container for content */
+      .container {
+        max-width: 1200px;
+        margin: auto;
+        background: var(--bg-light);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        padding: 30px;
+      }
+
+      /* Style headings for consistent typography */
+      h1,
+      h2,
+      h3 {
+        color: var(--text-dark);
+        margin-bottom: 10px;
+      }
+
+      /* Style cards for content sections */
+      .card {
+        background: var(--card-bg);
+        padding: 20px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        margin-bottom: 25px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      /* Add hover effect for cards */
+      .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Style scrollable box for transcript */
+      .scroll-box {
+        background: #f3f4f6;
+        border-left: 4px solid var(--primary-color);
+        border-radius: var(--radius);
+        padding: 16px;
+        max-height: 250px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+
+      /* Customize scrollbar appearance */
+      .scroll-box::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .scroll-box::-webkit-scrollbar-thumb {
+        background: #9ca3af;
+        border-radius: 4px;
+      }
+
+      /* Style tables for CSV data display */
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-top: 12px;
+        box-shadow: var(--shadow);
+      }
+
+      /* Style table headers with gradient background */
+      th {
+        background: linear-gradient(
+          to right,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        padding: 14px;
+        text-align: left;
+        font-size: 0.95rem;
+      }
+
+      /* Style table cells */
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #e5e7eb;
+        font-size: 0.88rem;
+      }
+
+      /* Add hover effect for table rows */
+      tr:hover {
+        background-color: #f1f5f9;
+      }
+
+      /* Style pagination container */
+      .pagination {
+        text-align: center;
+        margin-top: 12px;
+      }
+
+      /* Style pagination buttons */
+      .pagination button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 14px;
+        margin: 4px;
+        border-radius: var(--radius);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      /* Add hover effect for pagination buttons */
+      .pagination button:hover {
+        background: #5a67d8;
+      }
+
+      /* Style active pagination button */
+      .pagination button[style*="bold"] {
+        background: var(--accent-color);
+        font-weight: bold;
+      }
+
+      /* Style download button */
+      a.button {
+        display: inline-block;
+        padding: 12px 24px;
+        background: var(--danger-color);
+        color: white;
+        text-decoration: none;
+        border-radius: var(--radius);
+        font-weight: 600;
+        transition: background 0.3s ease;
+        margin-top: 20px;
+        text-align: center;
+      }
+
+      /* Add hover effect for download button */
+      a.button:hover {
+        background: #e65a5a;
+      }
+
+      /* Style visualization images */
+      img {
+        display: block;
+        margin: 24px auto;
+        max-width: 100%;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease;
+      }
+
+      /* Add hover zoom effect for images */
+      img:hover {
+        transform: scale(1.015);
+      }
+
+      /* Style search input container */
+      .search-container {
+        text-align: right;
+        margin: 24px 0;
+      }
+
+      /* Style search input field */
+      .search-container input {
+        width: 100%;
+        max-width: 280px;
+        padding: 10px 14px;
+        border: 1px solid #ccc;
+        border-radius: var(--radius);
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+
+      /* Style search input on focus */
+      .search-container input:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 5px rgba(102, 126, 234, 0.4);
+      }
+
+      /* Responsive styles for smaller screens */
+      @media (max-width: 768px) {
+        .container {
+          padding: 20px;
+        }
+
+        h1 {
+          font-size: 1.6rem;
+        }
+
+        h2 {
+          font-size: 1.4rem;
+        }
+
+        .pagination button {
+          padding: 6px 10px;
+          font-size: 0.85rem;
+        }
+
+        .search-container {
+          text-align: left;
+        }
+
+        .search-container input {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Analysis Results</h1>
+
+      <div class="card">
+        <h3>{{ video_title }}</h3>
+        <p><strong>Channel:</strong> {{ channel_name }}</p>
+      </div>
+
+      <h2>Full Transcript</h2>
+      <div class="scroll-box">{{ full_text }}</div>
+
+      <a
+        href="{{ url_for('static', filename='data/full_text.txt') }}"
+        download="MyTranscript.txt"
+        class="button"
+      >
+        Download Transcript
+      </a>
+
+      <div class="search-container">
+        <input
+          type="text"
+          id="globalSearch"
+          placeholder="Search across all CSV files..."
+          oninput="globalSearchHandler()"
+        />
+      </div>
+
+      <h2>CSV Preview</h2>
+      {% for filename, table in csv_data.items() %}
+      <div class="card">
+        <h3>{{ filename }}</h3>
+        <div id="table-container-{{ loop.index }}"></div>
+        <div class="pagination" id="pagination-{{ loop.index }}"></div>
+      </div>
+
+      <script>
+        // Initialize table data for current CSV
+        const tableData{{ loop.index }} = {{ table|tojson }};
+        let filteredData{{ loop.index }} = [...tableData{{ loop.index }}];
+        const tableDiv{{ loop.index }} = document.getElementById("table-container-{{ loop.index }}");
+        const paginationDiv{{ loop.index }} = document.getElementById("pagination-{{ loop.index }}");
+        const rowsPerPage{{ loop.index }} = 10;
+        let currentPage{{ loop.index }} = 1;
+
+        // Function to render table for current page
+        function renderTable{{ loop.index }}(page) {
+          let start = (page - 1) * rowsPerPage{{ loop.index }} + 1;
+          let end = start + rowsPerPage{{ loop.index }};
+          const headers = tableData{{ loop.index }}[0];
+          const rows = filteredData{{ loop.index }}.slice(start, end);
+
+          let html = "<table><thead><tr>";
+          headers.forEach(h => html += `<th>${h}</th>`);
+          html += "</tr></thead><tbody>";
+
+          rows.forEach(row => {
+            html += "<tr>";
+            row.forEach(cell => html += `<td>${cell}</td>`);
+            html += "</tr>";
+          });
+
+          html += "</tbody></table>";
+          tableDiv{{ loop.index }}.innerHTML = html;
+        }
+
+        // Function to render pagination controls
+        function renderPagination{{ loop.index }}() {
+          const totalPages = Math.ceil((filteredData{{ loop.index }}.length - 1) / rowsPerPage{{ loop.index }});
+          let html = "";
+
+          function createButton(p) {
+            return `<button onclick="changePage{{ loop.index }}(${p})"${p === currentPage{{ loop.index }} ? ' style="font-weight:bold;"' : ''}>${p}</button>`;
+          }
+
+          html += createButton(1);
+          if (currentPage{{ loop.index }} > 3) html += "<span> ... </span>";
+
+          for (let i = Math.max(2, currentPage{{ loop.index }} - 1); i <= Math.min(totalPages - 1, currentPage{{ loop.index }} + 1); i++) {
+            html += createButton(i);
+          }
+
+          if (currentPage{{ loop.index }} < totalPages - 2) html += "<span> ... </span>";
+          if (totalPages > 1) html += createButton(totalPages);
+
+          paginationDiv{{ loop.index }}.innerHTML = html;
+        }
+
+        // Function to change table page
+        function changePage{{ loop.index }}(page) {
+          currentPage{{ loop.index }} = page;
+          renderTable{{ loop.index }}(page);
+          renderPagination{{ loop.index }}();
+        }
+
+        // Function to filter table based on search query
+        function applyFilter{{ loop.index }}(query) {
+          filteredData{{ loop.index }} = tableData{{ loop.index }}.filter((row, i) => {
+            if (i === 0) return true;
+            return row.some(cell => String(cell).toLowerCase().includes(query));
+          });
+          currentPage{{ loop.index }} = 1;
+          renderTable{{ loop.index }}(currentPage{{ loop.index }});
+          renderPagination{{ loop.index }}();
+        }
+
+        // Initialize table and pagination
+        renderTable{{ loop.index }}(currentPage{{ loop.index }});
+        renderPagination{{ loop.index }}();
+      </script>
+      {% endfor %}
+
+      <script>
+        // Global search handler for all CSV tables
+        function globalSearchHandler() {
+          const query = document.getElementById("globalSearch").value.toLowerCase();
+          {% for filename, table in csv_data.items() %}
+          applyFilter{{ loop.index }}(query);
+          {% endfor %}
+        }
+      </script>
+
+      <h2>Generated Visualizations</h2>
+      {% for image in images %}
+      <img
+        src="{{ url_for('static', filename='data/' + image) }}"
+        alt="Visualization"
+      />
+      {% endfor %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,54 @@
+<!--
+YouTube Video Analysis Processing Page
+
+This HTML template creates a processing page for a YouTube Video Analyzer web application. It displays a simple message indicating that the video analysis is in progress and uses JavaScript to periodically check the processing status via an AJAX request to the "/check_status" endpoint. If processing is complete, the user is redirected to the results page; otherwise, the status is checked every 3 seconds. The page is minimal, with no external dependencies, ensuring a lightweight and focused user experience during processing.
+
+Features:
+- Displays a "Processing..." message to inform the user
+- Uses JavaScript and Fetch API for asynchronous status checking
+- Automatically redirects to the results page upon completion
+- Polls the server every 3 seconds to check processing status
+
+Dependencies:
+- None (uses native JavaScript and Fetch API)
+
+Author: Anonymous
+Version: 1.0
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Set character encoding to UTF-8 for proper text rendering -->
+    <meta charset="UTF-8" />
+    <!-- Set the page title to "Processing..." -->
+    <title>Processing...</title>
+    <script>
+      <!-- Function to check processing status via AJAX -->
+      function checkProcessingStatus() {
+        <!-- Fetch request to the /check_status endpoint -->
+        fetch("/check_status")
+          .then((response) => response.json())
+          .then((data) => {
+            <!-- Check if processing is complete -->
+            if (data.done) {
+              <!-- Redirect to the results page if done -->
+              window.location.href = "/results";
+            } else {
+              <!-- Retry status check after 3 seconds if not done -->
+              setTimeout(checkProcessingStatus, 3000); // Retry after 3 seconds
+            }
+          });
+      }
+
+      <!-- Start status checking when the page loads -->
+      window.onload = function () {
+        checkProcessingStatus();
+      };
+    </script>
+  </head>
+  <body>
+    <!-- Display a heading to inform the user that processing is ongoing -->
+    <h1>Processing your video, please wait...</h1>
+  </body>
+</html>
