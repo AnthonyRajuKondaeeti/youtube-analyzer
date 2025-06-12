@@ -2,6 +2,8 @@
 
 This project is a Flask-based web application and Chrome extension for analyzing YouTube video transcripts and comments. It extracts video metadata, transcripts, and comments using YouTube APIs, performs sentiment and emotion analysis, extracts keywords, and generates visualizations. Users can interact via a web interface or a Chrome extension popup directly from YouTube video pages.
 
+Check out my [LinkedIn post about the project](https://www.linkedin.com/feed/update/urn:li:activity:7325813617952460800/)
+
 ## Features
 
 - **Transcript Extraction**: Fetches YouTube transcripts in multiple languages (English, Hindi, Telugu) using the YouTube Transcript API.
